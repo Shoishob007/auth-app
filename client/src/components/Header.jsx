@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 
 export default function Header() {
   return (
-    <div className="bg-slate-200">
-      <div className="flex justify-between items-center mx-auto max-w-6xl p-4">
+    <div className="bg-gradient-to-r from-slate-300 to-slate-300 via-slate-200">
+      <div className="flex justify-between items-center mx-auto max-w-6xl px-8 py-4">
         <Link to="/">
           <h1 className="font-bold">Authentication</h1>
         </Link>

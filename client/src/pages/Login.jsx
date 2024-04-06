@@ -59,7 +59,7 @@ export default function Login() {
           type="email"
           placeholder="Email"
           id="email"
-          className="bg-slate-200 p-3 rounded-md "
+          className="bg-slate-200 p-3 rounded-lg "
           value={formdata.email || ""}
           onChange={handleChange}
         />
@@ -67,13 +67,13 @@ export default function Login() {
           type="password"
           placeholder="Password"
           id="password"
-          className="bg-slate-200 p-3 rounded-md "
+          className="bg-slate-200 p-3 rounded-lg "
           value={formdata.password || ""}
           onChange={handleChange}
         />
         <button
           disabled={loading}
-          className="bg-slate-700 text-white p-3 rounded-md uppercase hover:bg-slate-800 disabled:opacity-80 transition duration-200 cursor-pointer"
+          className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:bg-slate-800 disabled:opacity-80 transition duration-200 cursor-pointer"
         >
           {loading ? "Loading..." : "Sign In"}
         </button>

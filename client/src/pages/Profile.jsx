@@ -17,6 +17,7 @@ import {
   deleteStart,
   deleteSuccess,
   deleteFailure,
+  logout,
 } from "../redux/user/userSlice";
 
 export default function Profile() {
@@ -111,9 +112,24 @@ export default function Profile() {
       dispatch(deleteSuccess(data));
       localStorage.removeItem("token");
 
+      alert("Account deleted permanently");
+
       navigate("/login");
     } catch (error) {
       dispatch(deleteFailure(error));
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout");
+      console.log(currentUser);
+      dispatch(logout());
+      alert("Signed out!");
+      navigate("/login");
+      console.log(currentUser);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -183,7 +199,10 @@ export default function Profile() {
         >
           Delete Account
         </span>
-        <span className="text-red-500 hover:scale-105 transition duration-200">
+        <span
+          className="text-red-500 hover:scale-105 transition duration-200"
+          onClick={handleLogout}
+        >
           Sign Out
         </span>
       </div>

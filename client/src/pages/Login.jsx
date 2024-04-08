@@ -60,7 +60,7 @@ export default function Login() {
           placeholder="Email"
           id="email"
           className="bg-slate-200 p-3 rounded-lg "
-          value={formdata.email || ""}
+          value={formdata.email}
           onChange={handleChange}
         />
         <input
@@ -68,7 +68,7 @@ export default function Login() {
           placeholder="Password"
           id="password"
           className="bg-slate-200 p-3 rounded-lg "
-          value={formdata.password || ""}
+          value={formdata.password}
           onChange={handleChange}
         />
         <button

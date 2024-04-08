@@ -8,13 +8,19 @@ import {
 } from "firebase/storage";
 import { app } from "../firebase";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
 import {
   updateFailure,
   updateStart,
   updateSuccess,
+  deleteStart,
+  deleteSuccess,
+  deleteFailure,
 } from "../redux/user/userSlice";
 
 export default function Profile() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const fileRef = useRef(null);
   const [image, setImage] = useState(undefined);
@@ -87,6 +93,30 @@ export default function Profile() {
     }
   };
 
+  const handleDelete = async () => {
+    try {
+      dispatch(deleteStart());
+
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: "DELETE",
+      });
+
+      const data = await res.json();
+      console.log(data);
+      if (data.success == false) {
+        dispatch(deleteFailure(data));
+        return;
+      }
+
+      dispatch(deleteSuccess(data));
+      localStorage.removeItem("token");
+
+      navigate("/login");
+    } catch (error) {
+      dispatch(deleteFailure(error));
+    }
+  };
+
   return (
     <div className="p-3 max-w-md mx-auto">
       <h1 className="text-center text-2xl font-semibold my-5">Profile</h1>
@@ -147,7 +177,10 @@ export default function Profile() {
       </form>
 
       <div className="flex justify-between mt-2 ">
-        <span className="text-red-500 hover:scale-105 transition duration-200">
+        <span
+          className="text-red-500 hover:scale-105 transition duration-200"
+          onClick={handleDelete}
+        >
           Delete Account
         </span>
         <span className="text-red-500 hover:scale-105 transition duration-200">

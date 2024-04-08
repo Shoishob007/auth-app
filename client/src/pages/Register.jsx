@@ -54,7 +54,7 @@ export default function Register() {
           placeholder="User Name"
           id="userName"
           className="bg-slate-200 p-3 rounded-lg "
-          value={formdata.userName || ""}
+          value={formdata.userName}
           onChange={handleChange}
         />
         <input
@@ -62,7 +62,7 @@ export default function Register() {
           placeholder="Email"
           id="email"
           className="bg-slate-200 p-3 rounded-lg "
-          value={formdata.email || ""}
+          value={formdata.email}
           onChange={handleChange}
         />
         <input
@@ -70,7 +70,7 @@ export default function Register() {
           placeholder="Password"
           id="password"
           className="bg-slate-200 p-3 rounded-lg "
-          value={formdata.password || ""}
+          value={formdata.password}
           onChange={handleChange}
         />
         <button

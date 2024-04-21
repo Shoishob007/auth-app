@@ -11,14 +11,15 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import {
-  updateFailure,
-  updateStart,
-  updateSuccess,
+  updateProfileFailure,
+  updateProfileStart,
+  updateProfileSuccess,
   deleteStart,
   deleteSuccess,
   deleteFailure,
   logout,
 } from "../redux/user/userSlice";
+import ChangePassword from "../components/ChangeUserPassword";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -28,7 +29,8 @@ export default function Profile() {
   const [uploadPercentage, setUploadPercentage] = useState(0);
   const [uploadError, setUploadError] = useState(false);
   const [formData, setFormData] = useState({});
-  const [updateSuccessful, setUpdateSuccessful] = useState(false);
+  const [updateProfileSuccessful, setUpdateProfileSuccessful] = useState(false);
+  const [showChangePassword, setShowChangePassword] = useState(false);
 
   const { currentUser, loading, error } = useSelector((state) => state.user);
 
@@ -71,8 +73,9 @@ export default function Profile() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      dispatch(updateStart());
+      dispatch(updateProfileStart());
       const res = await fetch(`/api/user/update/${currentUser._id}`, {
         method: "POST",
         headers: {
@@ -84,13 +87,14 @@ export default function Profile() {
       const data = await res.json();
 
       if (data.success === false) {
-        dispatch(updateFailure(data));
+        dispatch(updateProfileFailure(data));
         return;
       }
-      dispatch(updateSuccess(data));
-      setUpdateSuccessful(true);
+
+      dispatch(updateProfileSuccess(data));
+      setUpdateProfileSuccessful(true);
     } catch (error) {
-      dispatch(updateFailure(error));
+      dispatch(updateProfileFailure(error));
     }
   };
 
@@ -123,11 +127,10 @@ export default function Profile() {
   const handleLogout = async () => {
     try {
       await fetch("/api/auth/logout");
-      console.log(currentUser);
+
       dispatch(logout());
       alert("Signed out!");
       navigate("/login");
-      console.log(currentUser);
     } catch (error) {
       console.log(error);
     }
@@ -179,17 +182,22 @@ export default function Profile() {
           className="bg-slate-200 rounded-lg p-3"
           onChange={handleChange}
         />
-        <input
-          type="password"
-          id="password"
-          defaultValue=""
-          placeholder="Password"
-          className="bg-slate-200 rounded-lg p-3"
-          onChange={handleChange}
-        />
+
         <button className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:bg-slate-800 disabled:opacity-80 transition duration-200 cursor-pointer">
           {loading ? "Loading..." : "Update Profile"}
         </button>
+        {!showChangePassword && (
+          <button
+            type="button"
+            className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:bg-slate-800 disabled:opacity-80 transition duration-200 cursor-pointer"
+            onClick={() => setShowChangePassword(true)}
+          >
+            Change Password
+          </button>
+        )}
+        {showChangePassword && (
+          <ChangePassword loading={loading} error={error} />
+        )}
       </form>
 
       <div className="flex justify-between mt-2 ">
@@ -208,7 +216,7 @@ export default function Profile() {
       </div>
       <p className="text-red-500 mt-4"> {error && "Something went wrong!"}</p>
       <p className="text-emerald-500 mt-4">
-        {updateSuccessful && "User has been updated successfully"}
+        {updateProfileSuccessful && "User has been updated successfully"}
       </p>
     </div>
   );

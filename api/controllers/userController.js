@@ -8,38 +8,66 @@ export const test = (req, res) => {
     })
 };
 
-//Updating user
+//Updating profile
 
-export const updateUser = async (req, res, next) => {
-    if (req.user.id !== req.params.id) {
-        return next(errorHandler(401, "You can update only your own profile!"))
-    }
+export const updateUserProfile = async (req, res, next) => {
+
 
     try {
-        if (req.body.password) {
-            req.body.password = bcryptjs.hashSync(req.body.password, 10)
+        if (req.user.id !== req.params.id) {
+            return next(errorHandler(401, "You can update only your own profile!"))
         }
 
-        const updatedUser = await User.findByIdAndUpdate(
+        const updatedUserProfile = await User.findByIdAndUpdate(
             req.params.id,
             {
                 $set: {
                     userName: req.body.userName,
                     email: req.body.email,
-                    password: req.body.password,
                     profilePicture: req.body.profilePicture
 
                 }
             },
             { new: true }
         )
-        const { password, ...rest } = updatedUser._doc
+        const { password, ...rest } = updatedUserProfile._doc
         res.status(200).json(rest);
     } catch (error) {
         next(error)
     }
 
 }
+
+//Change Password
+
+export const changeUserPassword = async (req, res, next) => {
+    try {
+        const { currentPassword, newPassword } = req.body;
+
+        const user = await User.findById(req.params.id);
+
+        if (!user) {
+            return next(errorHandler(404, "User not found"));
+        }
+
+        const isPasswordValid = await bcryptjs.compare(currentPassword, user.password);
+        if (!isPasswordValid) {
+            return next(errorHandler(401, "Current password is incorrect"));
+        }
+
+        const hashedPassword = bcryptjs.hashSync(newPassword, 10);
+
+        await User.findByIdAndUpdate(
+            req.params.id,
+            { $set: { password: hashedPassword } }
+        );
+
+        res.status(200).json({ success: true, message: "Password updated successfully" });
+    } catch (error) {
+        next(error);
+    }
+};
+
 
 //Deleting user account
 

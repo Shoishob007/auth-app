@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.Toastify__toast--success .Toastify__toast-body::before {
+  font-size: 20px;
+}

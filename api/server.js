@@ -7,7 +7,7 @@ import cookieParser from "cookie-parser";
 
 dotenv.config()
 
-mongoose.connect(process.env.MONGO).then(() => {
+mongoose.connect("mongodb+srv://shoishob:shoishob@cluster0.nx046.mongodb.net/authentication?retryWrites=true&w=majority&appName=Cluster0").then(() => {
     console.log("Connected to mongoDB")
 }).catch((err) => {
     console.log(err)

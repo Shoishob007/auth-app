@@ -8,7 +8,4 @@ router.post("/login", login)
 router.post("/google", google)
 router.get("/logout", logout)
 
-
-
-
 export default router
